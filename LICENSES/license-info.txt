@@ -1,0 +1,18 @@
+The files:
+
+- `bds_sampler/_sampler/DiGSampler.c`
+- `bds_sampler/_sampler/DiGSampler.h`
+
+were originally written by Charo Del Genio and are licensed under the AFL 3.0
+
+They were modified by Ian Hunt-Isaak (BSD-3)
+
+
+The files:
+`bds_sampler/_sampler/mt19937ar.c`
+`bds_sampler/_sampler/mt19937ar.h`
+
+were copied as is and contain license information.
+
+
+The rest of the project was written by Ian Hunt-Isaak and is BSD-3 Clause licensed (see LICENSE file)
