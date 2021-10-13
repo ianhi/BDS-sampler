@@ -13,14 +13,13 @@ which are an implementation of the paper Constructing and sampling directed grap
 ## Install
 
 ```bash
-python setup.py build_ext -i
-pip install .
+pip install bds-sampler
 ```
 
 # Usage
 
 ```python
-from bds_sampler import sample
+from bds_sampler import sample, make_degree_sequence
 import numpy as np
 
 seq = np.array(
@@ -36,5 +35,9 @@ seq = np.array(
 
 print(sample(in_seq=seq[:, 0], out_seq=seq[:, 1], N_samples=10))
 
+# or generate a random degree sequence with pareto distributed in and out degrees
+
+seq = make_degree_sequence(N_nodes=15)
+print(sample(in_seq=seq[:, 0], out_seq=seq[:, 1], N_samples=1))
 ```
 
