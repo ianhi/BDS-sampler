@@ -1,8 +1,10 @@
-cimport mt
 cimport graphs
+cimport mt
+
 import numpy as np
+
 cimport numpy as np
-from libc.stdlib cimport calloc, malloc, free
+from libc.stdlib cimport calloc, free, malloc
 
 
 def init_state(unsigned long s):
@@ -63,7 +65,7 @@ def sample(in_seq, out_seq, N_samples=1):
     out_seq : 1D np.array castable to np.int32
         the list of out degrees for the nodes. Must be same shape as in_seq
     N_samples : integer
-        number of graph topologies to generate based on the 
+        number of graph topologies to generate based on the
         given degree sequences
 
     Returns

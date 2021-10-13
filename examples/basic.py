@@ -1,5 +1,6 @@
-from bds_sampler import sample, make_degree_sequence
 import numpy as np
+
+from bds_sampler import make_degree_sequence, sample
 
 seq = np.array(
     [

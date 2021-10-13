@@ -177,7 +177,7 @@ void digsaminit(int **seq, const int n)
 {
 	int i, j;
 	unsigned long int outstubs = 0;
-	
+
 	/* Memory allocations */
 	orig.indegree    = calloc(n,sizeof(int));						// Original sequence in-degree
 	orig.outdegree   = calloc(n,sizeof(int));						// Original sequence out-degree
@@ -198,7 +198,7 @@ void digsaminit(int **seq, const int n)
 	allowed          = calloc(n,sizeof(int));						// Allowed nodes
 	G                = calloc(n+1,sizeof(int));
 	S                = calloc(n+1,sizeof(int));
-	
+
 	/* Initializations of sequences */
 	for (i=0; i<n; i++) {
 		orig.indegree[i]  = seq[i][0];
@@ -207,7 +207,7 @@ void digsaminit(int **seq, const int n)
 		orig.forbidden[i] = 0;
 		outstubs         += seq[i][1];
 	}
-	
+
 	/* Initialization of sample */
 	sample.list    = malloc(n*sizeof(int*));						// Adjacency list
 	sample.list[0] = calloc(outstubs,sizeof(int));
@@ -216,9 +216,9 @@ void digsaminit(int **seq, const int n)
 		sample.list[i] = sample.list[i-1]+orig.outdegree[i-1];
 		for (j=0; j<orig.outdegree[i]; j++) sample.list[i][j] = -1;
 	}
-	
+
 	len = n;
-	
+
 	return;
 }
 
@@ -228,7 +228,7 @@ void digsaminit(int **seq, const int n)
 /* Digraph sampler cleanup */
 void digsamclean(void)
 {
-	
+
 	free(orig.indegree);
 	free(orig.outdegree);
 	free(orig.label);
@@ -250,7 +250,7 @@ void digsamclean(void)
 	free(S);
 	free(sample.list[0]);
 	free(sample.list);
-	
+
 	return;
 }
 
@@ -260,7 +260,7 @@ void digsamclean(void)
 digraph digsam(double (*rng)(void), const int stfl)
 {
 	int i;
-	
+
 	for (i=0; i<len; i++) {
 		indseq.indegree[i] = orig.indegree[i];
 		indseq.outdegree[i] = orig.outdegree[i];
@@ -268,9 +268,9 @@ digraph digsam(double (*rng)(void), const int stfl)
 		indseq.forbidden[i] = 0;
 	}
 	sample.weight=0.0;								// Sample weight
-	
+
 	dirbuild(rng,stfl);								// Build the digraph
-	
+
 	return sample;//.list;
 }
 
@@ -281,10 +281,10 @@ static void dirbuild(double (*rng)(void), const int stfl)
 {
 	int work, target, alll, i;
 	unsigned long int ext, count, restubs;
-	
+
 	work = 0;																													// Find the first work node
 	while (!indseq.outdegree[work] && work<len) work++;
-	
+
 	while (work<len) {																											// If there are still nodes with out-stubs
 		indseq.forbidden[work] = 1;																								// Mark the work node as forbidden
 		while (indseq.outdegree[work]) {																						// If the work node still has out-stubs
@@ -314,7 +314,7 @@ static void dirbuild(double (*rng)(void), const int stfl)
 		work = 0;																												// Find the new work node
 		while (!indseq.outdegree[work] && work<len) work++;
 	}
-	
+
 	return;
 }
 
@@ -325,7 +325,7 @@ static void dirallow(int *work, int *alll, unsigned long int *restubs)
 {
 	int index=0, count=0, curdeg=-1, firstdeg, dumdeg, check, degchk, ind2, oripos, moven=0, tarpos, t, wlab, nw, wstin, wstfb;
 	long int lhs, rhs, gtilde;
-	
+
 	/* Start making a copy of the sequence.
 	   Add the leftmost adjacency set to the allowed node set.
 	   Also decrease the in-degrees of the nodes in the copy sequence
@@ -367,14 +367,14 @@ static void dirallow(int *work, int *alll, unsigned long int *restubs)
 		}
 		index++;
 	}
-	
+
 	/* In the copy sequence, revert the in-degree of the last node added to the set. */
 	check = (*(allowed+(*alll)-1));
 	newbds.indegree[check]++;
 	if (check) degchk = newbds.indegree[check-1];
 	else degchk = -1;
 	oripos = check;
-	
+
 	if (index<len) {																			// If there are more nodes left
 		for (ind2=index; ind2<len; ind2++) {													// Finish copying the sequence
 			newbds.indegree[ind2]  = indseq.indegree[ind2];
@@ -382,7 +382,7 @@ static void dirallow(int *work, int *alll, unsigned long int *restubs)
 			newbds.label[ind2]     = indseq.label[ind2];
 			newbds.forbidden[ind2] = indseq.forbidden[ind2];
 		}
-		
+
 		nw = 0;
 		while (newbds.label[nw]!=wlab) nw++;
 		if (nw>=oripos) {
@@ -399,7 +399,7 @@ static void dirallow(int *work, int *alll, unsigned long int *restubs)
 		newbds.label[nw] = wlab;
 		newbds.forbidden[nw] = wstfb;
 		newbds.outdegree[nw] = 1;																// Set to 1 the out-degree of the work node
-		
+
 		/* If needed, quickly reorder the sequence */
 		if (degchk!=-1) {
 			while (check<len && degchk<newbds.indegree[check]) {
@@ -429,7 +429,7 @@ static void dirallow(int *work, int *alll, unsigned long int *restubs)
 				}
 			}
 		}
-		
+
 		/* Build G and S for our digraphicality test */
 		for (t=0; t<=len; t++) S[t] = G[t] = 0;
 		G[newbds.outdegree[0]+1] = 1;
@@ -438,7 +438,7 @@ static void dirallow(int *work, int *alll, unsigned long int *restubs)
 			if (newbds.outdegree[t] >= t+1)  S[newbds.outdegree[t]]--;
 			if (newbds.outdegree[t]+1 > t+1) S[newbds.outdegree[t]+1]++;
 		}
-		
+
 		/* Find the last good node */
 		lhs = newbds.indegree[0];
 		rhs = len-1-G[0];
@@ -451,7 +451,7 @@ static void dirallow(int *work, int *alll, unsigned long int *restubs)
 			if (newbds.outdegree[t-1]>=t) rhs--;
 			gtilde += G[t]+S[t];
 		}
-		
+
 		while (t<len && lhs!=rhs) {
 			t++;
 			lhs += newbds.indegree[t-1];
@@ -459,7 +459,7 @@ static void dirallow(int *work, int *alll, unsigned long int *restubs)
 			if (newbds.outdegree[t-1]>=t) rhs--;
 			gtilde += G[t]+S[t];
 		}
-		
+
 		if (lhs!=rhs) t = -1;		// No fail node
 		else if (t==len) t = -1;
 		else {
@@ -467,7 +467,7 @@ static void dirallow(int *work, int *alll, unsigned long int *restubs)
 			if (t==len) t = -1;
 		}
 		if (t!=-1) t = newbds.label[t];
-		
+
 		/* Add to the allowed set all the non-forbidden nodes
 		   to the left of the fail node */
 		index = oripos+1;
@@ -480,7 +480,6 @@ static void dirallow(int *work, int *alll, unsigned long int *restubs)
 			index++;
 		}
 	}
-	
+
 	return;
 }
-

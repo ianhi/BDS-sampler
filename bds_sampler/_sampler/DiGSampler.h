@@ -201,7 +201,7 @@ static        void    dirallow   (int *work, int *alll, unsigned long int *restu
 static inline void lexisort(int *w, const int t)
 {
     int first, second, index=0, cpindex=0, saveinf, saveoutf, savelabf, saveins, saveouts, savelabs, labw;
-	
+
 	if (indseq.indegree[*w]>indseq.indegree[t]) {
 		first  = *w;
 		second = t;
@@ -212,7 +212,7 @@ static inline void lexisort(int *w, const int t)
 		first  = t;
 		second = *w;
 	}
-	
+
 	saveinf  = indseq.indegree[first];
 	saveoutf = indseq.outdegree[first];
 	savelabf = indseq.label[first];
@@ -220,7 +220,7 @@ static inline void lexisort(int *w, const int t)
 	saveouts = indseq.outdegree[second];
 	savelabs = indseq.label[second];
     labw = indseq.label[*w];
-	
+
 	while (index<len) {
 		if (index != *w && index != t) {
 			auxbds.indegree[cpindex]  = indseq.indegree[index];
@@ -231,10 +231,10 @@ static inline void lexisort(int *w, const int t)
 		}
 	index++;
 	}
-	
+
 	index = 0;
 	cpindex = 0;
-	
+
 	while (index<len-2 && ( auxbds.indegree[index]>saveinf || (auxbds.indegree[index]==saveinf && auxbds.outdegree[index]>saveoutf))) {
 		indseq.indegree[cpindex]  = auxbds.indegree[index];
 		indseq.outdegree[cpindex] = auxbds.outdegree[index];
@@ -271,6 +271,6 @@ static inline void lexisort(int *w, const int t)
 		cpindex++;
 		index++;
 	}
-	
+
 	return;
 }

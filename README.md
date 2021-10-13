@@ -40,4 +40,3 @@ print(sample(in_seq=seq[:, 0], out_seq=seq[:, 1], N_samples=10))
 seq = make_degree_sequence(N_nodes=15)
 print(sample(in_seq=seq[:, 0], out_seq=seq[:, 1], N_samples=1))
 ```
-
