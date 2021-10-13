@@ -1,0 +1,60 @@
+# copied nearly verbatim from
+# https://github.com/tlambert03/nd2/blob/174a2b75426631b54aad8c2440b6a5da5d4c5226/.github/workflows/deploy.yml
+name: Build & deploy
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04, windows-2019, macos-10.15]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        name: Install Python
+        with:
+          python-version: '3.8'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.2.0a1
+
+      - uses: actions/upload-artifact@v2
+        with:
+          path: ./wheelhouse/*.whl
+
+      - name: Build sdist
+        if: matrix.os == 'ubuntu-20.04'
+        run: python -m build --sdist
+
+      - uses: actions/upload-artifact@v2
+        if: matrix.os == 'ubuntu-20.04'
+        with:
+          path: dist/*.tar.gz
+
+  # upload_pypi:
+  #   needs: [build]
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
+  #   steps:
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: artifact
+  #         path: dist
+
+  #     - uses: pypa/gh-action-pypi-publish@v1.4.2
+  #       with:
+  #         user: __token__
+  #         password: ${{ secrets.TWINE_API_KEY }}
