@@ -1,3 +1,5 @@
+/* Modified by Ian Hunt-Isaak 2021-10-13 */
+
 /* This program is Copyright © 2011-2013 Charo I. Del Genio */
 
 /* Licensed under the Academic Free License version 3.0

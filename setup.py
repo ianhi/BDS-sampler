@@ -29,6 +29,8 @@ setup(
     name="bds_sampler",
     use_scm_version={"write_to": "bds_sampler/_version.py"},
     ext_modules=cythonize(
-        [ext], language_level=3, compiler_directives={"binding": False}
+        [ext],
+        language_level=3,
+        compiler_directives={"embedsignature": True},
     ),
 )
